@@ -1,0 +1,8 @@
+pandas
+streamlit
+requests
+BeautifulSoup
+openpyxl
+time
+json
+stqdm
