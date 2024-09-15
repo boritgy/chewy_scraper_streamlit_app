@@ -1,7 +1,7 @@
 pandas
 streamlit
 requests
-bs4
+﻿beautifulsoup4
 openpyxl
 time
 json
