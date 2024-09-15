@@ -224,7 +224,7 @@ if st.session_state.stage > 0:
             st.write("Scraping in progress...")
             
             st.write("Getting links..")
-            for i in stqdm(range(int(2))):
+            for i in stqdm(range(int(max_page))):
                 url = "https://www.chewy.com/b/" + category.rsplit("-", 1)[0] +"_c" + category.rsplit("-", 1)[1] + "_p" + str(i+1)
                 get_links(sh, url)
                 time.sleep(1)
