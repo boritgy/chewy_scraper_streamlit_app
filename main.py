@@ -214,7 +214,7 @@ if st.session_state.stage > 0:
             soup = BeautifulSoup(response.text, 'html.parser')
             max_page = 1
             max_page_container = soup.find_all('li', class_= 'kib-pagination-new__list-item')
-            if max_page != []:
+            if max_page_container != []:
                 max_page = max_page_container[-1].find('a')['aria-label'].replace("Page", "").strip()
             
             st.write("Scraping in progress...")
