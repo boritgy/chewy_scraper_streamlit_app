@@ -212,7 +212,10 @@ if st.session_state.stage > 0:
         response = requests.get("https://www.chewy.com/b/" + category, cookies=cookies, headers=headers)
         if (response.status_code == 200):
             soup = BeautifulSoup(response.text, 'html.parser')
-            max_page = soup.find_all('li', class_= 'kib-pagination-new__list-item')[-1].find('a')['aria-label'].replace("Page", "").strip()
+            max_page = 1
+            max_page_container = soup.find_all('li', class_= 'kib-pagination-new__list-item')
+            if max_page != []:
+                max_page = max_page_container[-1].find('a')['aria-label'].replace("Page", "").strip()
             
             st.write("Scraping in progress...")
             
