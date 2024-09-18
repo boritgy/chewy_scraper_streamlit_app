@@ -10,54 +10,83 @@ import pandas as pd
 
 st.title("Chewy scraper")
 
+def check_password():
+
+    def password_entered():
+        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the password.
+        else:
+            st.session_state["password_correct"] = False
+
+    # Return True if the password is validated.
+    if st.session_state.get("password_correct", False):
+        return True
+
+    # Show input for password.
+    st.text_input(
+        "Password", type="password", on_change=password_entered, key="password"
+    )
+    if "password_correct" in st.session_state:
+        st.error("😕 Wrong password")
+    return False
+
+
+if not check_password():
+    st.stop()  # Do not continue if check_password is not True.
+
 cookies = {
-    'ajs_anonymous_id': '47dd1547-3473-403a-9b46-f53f1e5c8516',
-    'device-id': 'e75aec2b-9f6a-45bd-8585-325684e1ccae',
-    'experiment_': '',
-    'pid': 'zAdfeO0gQteR3EwdvManIw',
-    'rxVisitor': '172614886550717S0UUK9BMOTP7EGAPL4A5G9REERETCE',
-    'abTestingAnonymousPID': 'zAdfeO0gQteR3EwdvManIw',
-    '_gcl_au': '1.1.1261460882.1726148875',
-    '_ga': 'GA1.1.1996544349.1726148875',
-    '_mibhv': 'anon-1726148876453-4913162035_6593',
-    '_fbp': 'fb.1.1726148877979.83309416726697474',
-    '_tt_enable_cookie': '1',
-    '_ttp': 'qRgXiEjWS4DFlo_-NnL2tBZn4cQ',
-    'addshoppers.com': '2%7C1%3A0%7C10%3A1726148801%7C15%3Aaddshoppers.com%7C44%3AOWU2YTY0NjhmYjQ4NGFlZGE0ZmMxZmNiZjgzMjhiN2I%3D%7C0590968691d8fb528fbbb09d12aa8c13d660abfa8cbb39463eb00328f6712991',
-    '_iidt': 'BonYizeKv/gjvDwQzJQo9W/tZLy5bBPdswJpAyXAQoBf04FrgFFjFb4JvtlSFVGG38fkH+3XesfsXGDGE7DRGSh6YQFevJXL0gI8KDM=',
-    'fpPostInitStatus': 'SuccessfulResponse',
-    '_vid_t': '32Wrtu0MjaVThYGsNZU3AmadDFyTkWynThKdZAQb2bLJhVL/fXhUg3HWFXifDTQYXOAE5+oTNf1tRwJ4xjL9f9Ra2JshGnxw63YExVE=',
-    'fppro_id': '{"rid":"1726148801954.6LwjS4","vid":"QY9VQsvezRldiCIrr5FY","exp":1726753680213}',
-    '_RCRTX03': 'd3bb2b68711711efa8edbd5e4cdcbd3d155b8d8b36e64d6cb01100facca103a8',
-    '_RCRTX03-samesite': 'd3bb2b68711711efa8edbd5e4cdcbd3d155b8d8b36e64d6cb01100facca103a8',
-    '_ga_18116CKN3R': 'GS1.1.1726153332.1.1.1726157023.0.0.0',
-    'sid': '8f545594-8556-4c17-b1c6-c828b261e93b',
+    'device-id': '501d37e6-79ae-465c-b0c7-9766d38d59dc',
+    'pid': '4J3Di1eUQcuZ_RD4u85HmA',
+    'sid': '1839bb0a-1971-4312-b667-0c883a662da3',
     'x-feature-preview': 'false',
-    'ajs_anonymous_id': '47dd1547-3473-403a-9b46-f53f1e5c8516',
-    'KP_UIDz-ssn': '0a4RJMw9qeIxlLDhFFEhJrh17mLS9onFYtcfXPRPruzOSof8KNgUJ3mTxEPo7RU9BZBr0JX3NwTJQ9GSlApIXiISzxHTEvV34DOG2cWdrZvVGisdFpYcZPivYPuTlvRQ9iZdwCsVVtES3mhKPHA1gKUOqrPcyb10hbf2CbGruDZ',
-    'KP_UIDz': '0a4RJMw9qeIxlLDhFFEhJrh17mLS9onFYtcfXPRPruzOSof8KNgUJ3mTxEPo7RU9BZBr0JX3NwTJQ9GSlApIXiISzxHTEvV34DOG2cWdrZvVGisdFpYcZPivYPuTlvRQ9iZdwCsVVtES3mhKPHA1gKUOqrPcyb10hbf2CbGruDZ',
-    'pageviewCount': '130',
-    '_abck': '5B4A007F283448D453DAE9D2C5A3F834~-1~YAAQBwRTaMty2/ORAQAAsbB9/AzCHqIOSpNJeWTDPF2DqEtnwkK86z4G28LzgY/a8kRM63vccXLzhqwhwFAilpIbJhrTiHsxdQyfRN+0CMqBh3SPhl/nA4RRFa30qr0PBvnwCiT+jAvdatsKfBoxSESWK3j8/0pWKW6StiS7fepfAfwjx/V3W+W0jn/fwUTgEl0O/krh2UxqH5z4dBn/FewMWsrYBcJk/Xry2sAGt/P2Pj9TkJ5HWbjxYFbQwvStjQ5stS3Hxk3/RMvLjqpCEpWm4OLhTgShKZbZetNI1C/uRidIvxcJatBdH2An34LbazDH+movQtH6FZPUSEohN8fHv9YLneiE1wNah1P+FdDGe6w5p6Gjl7iGddV3Pf2737jyNHzZGhyiTkHTyQA8zdBZL/Vca/S8oWAnPKW2Np0LNItrLNzOna3xE0n6BwMaYIQNreerRV0syJqqSEOZYt38p33hJ6QmXDAgZ8ZxtG0L2Q3/mN002l7fCv92aAwzs857TGF+FrcwExf93EziA6ZZUaM1obry1Q==~-1~||0||~-1',
-    '_uetsid': '9e4ceb80710d11ef96a5e78feb9245ee',
-    '_uetvid': '9e4d37e0710d11efae7c991463647fcd',
-    'OptanonConsent': 'isGpcEnabled=0&datestamp=Mon+Sep+16+2024+22%3A19%3A43+GMT%2B0200+(k%C3%B6z%C3%A9p-eur%C3%B3pai+ny%C3%A1ri+id%C5%91)&version=202304.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=BG36%3A1%2CC0004%3A1%2CC0010%3A1%2CC0011%3A1%2CC0001%3A1%2CC0003%3A1%2CC0002%3A1&AwaitingReconsent=false',
-    'akavpau_defaultvp': '1726518458~id=5fb879d3657c8bc46f45b8dae944a67d',
-    'dtCookie': 'v_4_srv_-2D79_sn_26PP1ALP0FTJ1SNVLMS0ULP5SPB1Q0HN_app-3A7077613abb396c51_1_ol_0_perc_100000_mul_1_rcs-3Acss_0',
-    '_clck': '1vwylvv%7C2%7Cfp9%7C0%7C1716',
-    '_clsk': 'c8wiz7%7C1726560717261%7C1%7C0%7Cu.clarity.ms%2Fcollect',
-    '_ga_GM4GWYGVKP': 'GS1.1.1726560722.21.0.1726560722.60.0.0',
-    'rxvt': '1726562522056|1726560412217',
-    'dtPC': '-79$317979330_358h25vHDEWSRNROKQSORRJCJLUPTRGRMDFKCPV-0e0',
-    'RT': '"z=1&dm=www.chewy.com&si=98b81efb-454e-424b-a1e9-2d9063314156&ss=m15g7ygy&sl=1&tt=cop&nu=12cc2c38&cl=pgcro&ld=pgcwp&ul=pgcwq"',
-    'dtSa': 'false%7CC%7C25%7CCat%7Cfetch%7C1726560721919%7C317979330_358%7Chttps%3A%2F%2Fwww.chewy.com%2Fpedigree-complete-nutrition-grilled%2Fdp%2F141433%7C%7C%7C%7C',
+    'abTestingAnonymousPID': 'K9AjefB4QVy6zeKGnFqADg',
+    '_gcl_au': '1.1.1916444144.1726562974',
+    '_ga': 'GA1.1.39900230.1726562974',
+    'rxVisitor': '172656297441797CIT7PKGJ3VDF1O2ETEFSK4KL1U1URM',
+    'dtSa': '-',
+    '_fbp': 'fb.1.1726562974779.68070706348477632',
+    '_mibhv': 'anon-1726562974923-2204694577_6593',
+    'fpGetInitStatus': 'SuccessfulResponse',
+    '_tt_enable_cookie': '1',
+    '_ttp': 'dTv3piPSJT1P5m5IYcWHUhi4Juj',
+    'ajs_anonymous_id': '0e516ba1-4662-4a70-8628-bff483311dd7',
+    '_iidt': 'fQzUHXU9waSIkMr7IF1KgUEA1CO1oXIzvULeQAC/qlMIjuKQHWLAiQZCvtdOxOPJcZXpVllCNaQUww==',
+    'fpPostInitStatus': 'SuccessfulResponse',
+    '_vid_t': '9OV6ytAcv9CN98xyhDvS1JiyrpZSiKFuw3TJXf4hwjckXTiF3xH5k++LrY1fthCHq1sXLJXA+6gSHw==',
+    'fppro_id': '{"rid":"1726508880084.MXcdEb","vid":"z8RX4Dez2DdvMwIkaMwe","exp":1727167775921}',
+    'addshoppers.com': '2%7C1%3A0%7C10%3A1726508880%7C15%3Aaddshoppers.com%7C44%3AMDhiMWQ4MmU4NmI4NDI2NWJhMzhjNzNmMWQxZTYyNGQ%3D%7C80e05a031f510e961d9c521fa68174f4ab6d12b458840624879e4522863c980e',
+    'RT': '"z=1&dm=www.chewy.com&si=e2a4c6f1-b216-4769-9d7d-a662a70d12c5&ss=m16n3yi8&sl=1&tt=3z3&rl=1&ld=3z4&ul=bck&hd=bff"',
+    'experiment_': '',
+    'KP_UIDz-ssn': '02ryFOXkpHBACSfLTb2eicT9GpiFm8eXU541ZbpDVi1UXv4Dt1WuivD7YZioPw50KWQ9KD5Zv8lm8eQ0Q41iJ0eDeN5gImIi7pOg0G5sRHGhA4ptOWszXEhn2wUFAP0h7UrcwV0mTB7dOHL2APwXbjkxqCo1imt3THFREr7Y2elUz1tT4845MAnaM2hula4Q1dF3cRNjwntPh',
+    'KP_UIDz': '02ryFOXkpHBACSfLTb2eicT9GpiFm8eXU541ZbpDVi1UXv4Dt1WuivD7YZioPw50KWQ9KD5Zv8lm8eQ0Q41iJ0eDeN5gImIi7pOg0G5sRHGhA4ptOWszXEhn2wUFAP0h7UrcwV0mTB7dOHL2APwXbjkxqCo1imt3THFREr7Y2elUz1tT4845MAnaM2hula4Q1dF3cRNjwntPh',
+    'AKA_A2': 'A',
+    'ak_bmsc': '04D947401BC2588FDE0EAF3E0A6857E9~000000000000000000000000000000~YAAQilgWAs1QoOKRAQAAqcIaBBlvSlGWBy0rOH7XgUBB64DuoPxVydqyp73RRfipxE9tDQahUkfVRwE9dyvZYMuxFTf/rdmrZE+50X6QZuZn20Zn0jt6tcS+GgB3KTeGiu4G1E8+uVkQnfoicc9H5m1n84HEaR3OF2KEI7eYpT6zhCAbPyTrYw1pwqQ5j3DFnDogkMbpH1ec9cdGpjghCs9qttKJlYL8ZA6+nv1uBm4QVIUM1+aYy+0X/RAvWZ/6MLEH/qLfYObVvdApJo8LFbvjByMz/gu8+pCZvBgtIWWUkWPUm1yW23J57ndrin1yaoFJig1dJzB40V0SIPU6hvlmeIApgmGoKBeDRM06NmxQSG9/Kj4eEPeARmmT3akSqLQz/Xw9NPRo',
+    'bm_sz': '8A27820CC3CE2D212B5C6ADADFA80D6F~YAAQilgWAs9QoOKRAQAAqcIaBBnfGHXhFA1iJ2zRaI9KqO0kR0HQhwjGZBT6ZpRR0On4Y86Rft39cRoCic4i22nXwmNMvZn0dp5b8MybXSaSPXV47Dy6DJwXnD48lcOhYru2SRJ9NA/IGRPZqn9/MiOM/fElOKcqH1ReMKxxHQdhzcrJ5Y2W+rautM/XT06RvamG/r2okScjB1a7+t90canQU24ee4J73BgUWpFJVZcRKYxvzbS5tSNoorumceHt7MUFU9B8h/NlDQiZhsDAg+V2ngOEOw1J9I3MghQMUGIgflzn+nZeLAwhGI76ywpopjerYYR5cxKv9eqtNk4QmEqpIfDArvWLIah8062SAEQc/epYJV8dhCcKFZI05K6Wy+XvBnBXPyOQg/h4Ew==~3618886~4470850',
+    'chewy-insights': 'ts=https://www.chewy.com/',
+    'bm_sv': 'F55694C4E8FA728355C856F5AA25FB09~YAAQhlgWAt4Obf2RAQAA4sgaBBmozr01gaHE+QgMj/IwECFB0OvxLKXWtdFqUqyBdQMCHRuhK4QxIEfaIS0H8WCEQQejp2tXXUe5zaimidt4vFfNczd2L9vKIRr2jHEJ299EETkCUQsdm5mswhwQ0qxRfqy+qke+RcZpXGuuPh9G5q2o9epn9SaCRnXgKOTZn30McyI7FrnHMdZcLpuvcxHYLvtTfDUuqtUWG2U2bM/POhXl4fNxPWa4EaFFeMI=~1',
+    '_abck': 'D72CA898F39A1BD80917F567A9F1B7E1~-1~YAAQhlgWAvEObf2RAQAAeM4aBAxVLev2+rS4rnbMPD1hnV/60kINHYrsnE6edR+WcIckIZiMQ+hyJVFPlVMPqWYDTe7LG4edAAFteHlQrSgACFwsxM7umnLkdwUPm9RX1wpz8STtQu1u0dPTXElmnFgyUlwMcv4hGXUsIZhG8k1+/sRlJzkDaC9L0UOzaRc4iW67Cn6h2qYciLOfE8sI7EZjAuzHWJ4yLLjqRMmcv2BLGQN2RMksfOvkAr+9Fuq/wZI1dNli05qBaB4tRLhrUv0ll/vUdclz0sfEeaUNzHlOnZfCw5VsTwMk4cYzqopEPQjkvG5YZa65Pk/PIidld00tLgI4vj3VNdZ7nyWesXPdx0OmJcc6PgfQ7aw06uc0pxrxvZAY22Avumzpbra06qd86gfxhbMX++suqcgMmcV/GT1KMhiIIvNwzdFXBGHXDePRoWZPySjh0sMDhHsrrphsZpo+z1arTGEiziNlUwQeEaXoAhRBTVOg8xzqOGVlBhGDJuwRHkCvo5BOTgB1FiA/aSQ=~-1~-1~-1',
+    'pageviewCount': '4',
+    'pageviewCount30m': '1',
+    '_uetsid': 'c38d390074d111efab3fe3763a2d5640',
+    '_uetvid': 'c38d6f3074d111efaa4d197904445237',
+    'OptanonConsent': 'isGpcEnabled=0&datestamp=Wed+Sep+18+2024+09%3A48%3A39+GMT%2B0200+(k%C3%B6z%C3%A9p-eur%C3%B3pai+ny%C3%A1ri+id%C5%91)&version=202304.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=BG36%3A1%2CC0004%3A1%2CC0010%3A1%2CC0011%3A1%2CC0001%3A1%2CC0003%3A1%2CC0002%3A1&AwaitingReconsent=false',
+    'dtCookie': 'v_4_srv_11_sn_P0BCVKEJ8PU0IAQ36NHB98TJMEJCQNOV_app-3A7077613abb396c51_1_ol_0_perc_100000_mul_1_rcs-3Acss_0',
+    'rxvt': '1726647520947|1726645718958',
+    'dtPC': '11$445718954_758h-vPWAHWWWHEWWHLDJROFORUWSPLGAALMUQ-0e0',
+    '_clck': '7tp568%7C2%7Cfpa%7C0%7C1720',
+    '_clsk': 'vekcug%7C1726645721446%7C1%7C0%7Cr.clarity.ms%2Fcollect',
+    '_ga_GM4GWYGVKP': 'GS1.1.1726645719.3.0.1726645730.49.0.0',
+    'akavpau_defaultvp': '1726646030~id=7a946bc02c82fd494c12eeae80766dc6',
+    'akaalb_chewy_ALB': '1726646330~op=chewy_com_ALB:www-chewy-use2|prd_kasada:prd-kasada-haproxy-use1|~rv=16~m=www-chewy-use2:0|prd-kasada-haproxy-use1:0|~os=43a06daff4514d805d02d3b6b5e79808~id=be31e0a6e3aa8f0882c6df9fe1e81363',
 }
 
 headers = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     'accept-language': 'hu-HU,hu;q=0.9,el-GR;q=0.8,el;q=0.7,en-US;q=0.6,en;q=0.5',
-    # 'cookie': 'ajs_anonymous_id=47dd1547-3473-403a-9b46-f53f1e5c8516; device-id=e75aec2b-9f6a-45bd-8585-325684e1ccae; experiment_=; pid=zAdfeO0gQteR3EwdvManIw; rxVisitor=172614886550717S0UUK9BMOTP7EGAPL4A5G9REERETCE; abTestingAnonymousPID=zAdfeO0gQteR3EwdvManIw; _gcl_au=1.1.1261460882.1726148875; _ga=GA1.1.1996544349.1726148875; _mibhv=anon-1726148876453-4913162035_6593; _fbp=fb.1.1726148877979.83309416726697474; _tt_enable_cookie=1; _ttp=qRgXiEjWS4DFlo_-NnL2tBZn4cQ; addshoppers.com=2%7C1%3A0%7C10%3A1726148801%7C15%3Aaddshoppers.com%7C44%3AOWU2YTY0NjhmYjQ4NGFlZGE0ZmMxZmNiZjgzMjhiN2I%3D%7C0590968691d8fb528fbbb09d12aa8c13d660abfa8cbb39463eb00328f6712991; _iidt=BonYizeKv/gjvDwQzJQo9W/tZLy5bBPdswJpAyXAQoBf04FrgFFjFb4JvtlSFVGG38fkH+3XesfsXGDGE7DRGSh6YQFevJXL0gI8KDM=; fpPostInitStatus=SuccessfulResponse; _vid_t=32Wrtu0MjaVThYGsNZU3AmadDFyTkWynThKdZAQb2bLJhVL/fXhUg3HWFXifDTQYXOAE5+oTNf1tRwJ4xjL9f9Ra2JshGnxw63YExVE=; fppro_id={"rid":"1726148801954.6LwjS4","vid":"QY9VQsvezRldiCIrr5FY","exp":1726753680213}; _RCRTX03=d3bb2b68711711efa8edbd5e4cdcbd3d155b8d8b36e64d6cb01100facca103a8; _RCRTX03-samesite=d3bb2b68711711efa8edbd5e4cdcbd3d155b8d8b36e64d6cb01100facca103a8; _ga_18116CKN3R=GS1.1.1726153332.1.1.1726157023.0.0.0; sid=8f545594-8556-4c17-b1c6-c828b261e93b; x-feature-preview=false; ajs_anonymous_id=47dd1547-3473-403a-9b46-f53f1e5c8516; KP_UIDz-ssn=0a4RJMw9qeIxlLDhFFEhJrh17mLS9onFYtcfXPRPruzOSof8KNgUJ3mTxEPo7RU9BZBr0JX3NwTJQ9GSlApIXiISzxHTEvV34DOG2cWdrZvVGisdFpYcZPivYPuTlvRQ9iZdwCsVVtES3mhKPHA1gKUOqrPcyb10hbf2CbGruDZ; KP_UIDz=0a4RJMw9qeIxlLDhFFEhJrh17mLS9onFYtcfXPRPruzOSof8KNgUJ3mTxEPo7RU9BZBr0JX3NwTJQ9GSlApIXiISzxHTEvV34DOG2cWdrZvVGisdFpYcZPivYPuTlvRQ9iZdwCsVVtES3mhKPHA1gKUOqrPcyb10hbf2CbGruDZ; pageviewCount=130; _abck=5B4A007F283448D453DAE9D2C5A3F834~-1~YAAQBwRTaMty2/ORAQAAsbB9/AzCHqIOSpNJeWTDPF2DqEtnwkK86z4G28LzgY/a8kRM63vccXLzhqwhwFAilpIbJhrTiHsxdQyfRN+0CMqBh3SPhl/nA4RRFa30qr0PBvnwCiT+jAvdatsKfBoxSESWK3j8/0pWKW6StiS7fepfAfwjx/V3W+W0jn/fwUTgEl0O/krh2UxqH5z4dBn/FewMWsrYBcJk/Xry2sAGt/P2Pj9TkJ5HWbjxYFbQwvStjQ5stS3Hxk3/RMvLjqpCEpWm4OLhTgShKZbZetNI1C/uRidIvxcJatBdH2An34LbazDH+movQtH6FZPUSEohN8fHv9YLneiE1wNah1P+FdDGe6w5p6Gjl7iGddV3Pf2737jyNHzZGhyiTkHTyQA8zdBZL/Vca/S8oWAnPKW2Np0LNItrLNzOna3xE0n6BwMaYIQNreerRV0syJqqSEOZYt38p33hJ6QmXDAgZ8ZxtG0L2Q3/mN002l7fCv92aAwzs857TGF+FrcwExf93EziA6ZZUaM1obry1Q==~-1~||0||~-1; _uetsid=9e4ceb80710d11ef96a5e78feb9245ee; _uetvid=9e4d37e0710d11efae7c991463647fcd; OptanonConsent=isGpcEnabled=0&datestamp=Mon+Sep+16+2024+22%3A19%3A43+GMT%2B0200+(k%C3%B6z%C3%A9p-eur%C3%B3pai+ny%C3%A1ri+id%C5%91)&version=202304.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=BG36%3A1%2CC0004%3A1%2CC0010%3A1%2CC0011%3A1%2CC0001%3A1%2CC0003%3A1%2CC0002%3A1&AwaitingReconsent=false; akavpau_defaultvp=1726518458~id=5fb879d3657c8bc46f45b8dae944a67d; dtCookie=v_4_srv_-2D79_sn_26PP1ALP0FTJ1SNVLMS0ULP5SPB1Q0HN_app-3A7077613abb396c51_1_ol_0_perc_100000_mul_1_rcs-3Acss_0; _clck=1vwylvv%7C2%7Cfp9%7C0%7C1716; _clsk=c8wiz7%7C1726560717261%7C1%7C0%7Cu.clarity.ms%2Fcollect; _ga_GM4GWYGVKP=GS1.1.1726560722.21.0.1726560722.60.0.0; rxvt=1726562522056|1726560412217; dtPC=-79$317979330_358h25vHDEWSRNROKQSORRJCJLUPTRGRMDFKCPV-0e0; RT="z=1&dm=www.chewy.com&si=98b81efb-454e-424b-a1e9-2d9063314156&ss=m15g7ygy&sl=1&tt=cop&nu=12cc2c38&cl=pgcro&ld=pgcwp&ul=pgcwq"; dtSa=false%7CC%7C25%7CCat%7Cfetch%7C1726560721919%7C317979330_358%7Chttps%3A%2F%2Fwww.chewy.com%2Fpedigree-complete-nutrition-grilled%2Fdp%2F141433%7C%7C%7C%7C',
+    'cache-control': 'max-age=0',
+    # 'cookie': 'device-id=501d37e6-79ae-465c-b0c7-9766d38d59dc; pid=4J3Di1eUQcuZ_RD4u85HmA; sid=1839bb0a-1971-4312-b667-0c883a662da3; x-feature-preview=false; abTestingAnonymousPID=K9AjefB4QVy6zeKGnFqADg; _gcl_au=1.1.1916444144.1726562974; _ga=GA1.1.39900230.1726562974; rxVisitor=172656297441797CIT7PKGJ3VDF1O2ETEFSK4KL1U1URM; dtSa=-; _fbp=fb.1.1726562974779.68070706348477632; _mibhv=anon-1726562974923-2204694577_6593; fpGetInitStatus=SuccessfulResponse; _tt_enable_cookie=1; _ttp=dTv3piPSJT1P5m5IYcWHUhi4Juj; ajs_anonymous_id=0e516ba1-4662-4a70-8628-bff483311dd7; _iidt=fQzUHXU9waSIkMr7IF1KgUEA1CO1oXIzvULeQAC/qlMIjuKQHWLAiQZCvtdOxOPJcZXpVllCNaQUww==; fpPostInitStatus=SuccessfulResponse; _vid_t=9OV6ytAcv9CN98xyhDvS1JiyrpZSiKFuw3TJXf4hwjckXTiF3xH5k++LrY1fthCHq1sXLJXA+6gSHw==; fppro_id={"rid":"1726508880084.MXcdEb","vid":"z8RX4Dez2DdvMwIkaMwe","exp":1727167775921}; addshoppers.com=2%7C1%3A0%7C10%3A1726508880%7C15%3Aaddshoppers.com%7C44%3AMDhiMWQ4MmU4NmI4NDI2NWJhMzhjNzNmMWQxZTYyNGQ%3D%7C80e05a031f510e961d9c521fa68174f4ab6d12b458840624879e4522863c980e; RT="z=1&dm=www.chewy.com&si=e2a4c6f1-b216-4769-9d7d-a662a70d12c5&ss=m16n3yi8&sl=1&tt=3z3&rl=1&ld=3z4&ul=bck&hd=bff"; experiment_=; KP_UIDz-ssn=02ryFOXkpHBACSfLTb2eicT9GpiFm8eXU541ZbpDVi1UXv4Dt1WuivD7YZioPw50KWQ9KD5Zv8lm8eQ0Q41iJ0eDeN5gImIi7pOg0G5sRHGhA4ptOWszXEhn2wUFAP0h7UrcwV0mTB7dOHL2APwXbjkxqCo1imt3THFREr7Y2elUz1tT4845MAnaM2hula4Q1dF3cRNjwntPh; KP_UIDz=02ryFOXkpHBACSfLTb2eicT9GpiFm8eXU541ZbpDVi1UXv4Dt1WuivD7YZioPw50KWQ9KD5Zv8lm8eQ0Q41iJ0eDeN5gImIi7pOg0G5sRHGhA4ptOWszXEhn2wUFAP0h7UrcwV0mTB7dOHL2APwXbjkxqCo1imt3THFREr7Y2elUz1tT4845MAnaM2hula4Q1dF3cRNjwntPh; AKA_A2=A; ak_bmsc=04D947401BC2588FDE0EAF3E0A6857E9~000000000000000000000000000000~YAAQilgWAs1QoOKRAQAAqcIaBBlvSlGWBy0rOH7XgUBB64DuoPxVydqyp73RRfipxE9tDQahUkfVRwE9dyvZYMuxFTf/rdmrZE+50X6QZuZn20Zn0jt6tcS+GgB3KTeGiu4G1E8+uVkQnfoicc9H5m1n84HEaR3OF2KEI7eYpT6zhCAbPyTrYw1pwqQ5j3DFnDogkMbpH1ec9cdGpjghCs9qttKJlYL8ZA6+nv1uBm4QVIUM1+aYy+0X/RAvWZ/6MLEH/qLfYObVvdApJo8LFbvjByMz/gu8+pCZvBgtIWWUkWPUm1yW23J57ndrin1yaoFJig1dJzB40V0SIPU6hvlmeIApgmGoKBeDRM06NmxQSG9/Kj4eEPeARmmT3akSqLQz/Xw9NPRo; bm_sz=8A27820CC3CE2D212B5C6ADADFA80D6F~YAAQilgWAs9QoOKRAQAAqcIaBBnfGHXhFA1iJ2zRaI9KqO0kR0HQhwjGZBT6ZpRR0On4Y86Rft39cRoCic4i22nXwmNMvZn0dp5b8MybXSaSPXV47Dy6DJwXnD48lcOhYru2SRJ9NA/IGRPZqn9/MiOM/fElOKcqH1ReMKxxHQdhzcrJ5Y2W+rautM/XT06RvamG/r2okScjB1a7+t90canQU24ee4J73BgUWpFJVZcRKYxvzbS5tSNoorumceHt7MUFU9B8h/NlDQiZhsDAg+V2ngOEOw1J9I3MghQMUGIgflzn+nZeLAwhGI76ywpopjerYYR5cxKv9eqtNk4QmEqpIfDArvWLIah8062SAEQc/epYJV8dhCcKFZI05K6Wy+XvBnBXPyOQg/h4Ew==~3618886~4470850; chewy-insights=ts=https://www.chewy.com/; bm_sv=F55694C4E8FA728355C856F5AA25FB09~YAAQhlgWAt4Obf2RAQAA4sgaBBmozr01gaHE+QgMj/IwECFB0OvxLKXWtdFqUqyBdQMCHRuhK4QxIEfaIS0H8WCEQQejp2tXXUe5zaimidt4vFfNczd2L9vKIRr2jHEJ299EETkCUQsdm5mswhwQ0qxRfqy+qke+RcZpXGuuPh9G5q2o9epn9SaCRnXgKOTZn30McyI7FrnHMdZcLpuvcxHYLvtTfDUuqtUWG2U2bM/POhXl4fNxPWa4EaFFeMI=~1; _abck=D72CA898F39A1BD80917F567A9F1B7E1~-1~YAAQhlgWAvEObf2RAQAAeM4aBAxVLev2+rS4rnbMPD1hnV/60kINHYrsnE6edR+WcIckIZiMQ+hyJVFPlVMPqWYDTe7LG4edAAFteHlQrSgACFwsxM7umnLkdwUPm9RX1wpz8STtQu1u0dPTXElmnFgyUlwMcv4hGXUsIZhG8k1+/sRlJzkDaC9L0UOzaRc4iW67Cn6h2qYciLOfE8sI7EZjAuzHWJ4yLLjqRMmcv2BLGQN2RMksfOvkAr+9Fuq/wZI1dNli05qBaB4tRLhrUv0ll/vUdclz0sfEeaUNzHlOnZfCw5VsTwMk4cYzqopEPQjkvG5YZa65Pk/PIidld00tLgI4vj3VNdZ7nyWesXPdx0OmJcc6PgfQ7aw06uc0pxrxvZAY22Avumzpbra06qd86gfxhbMX++suqcgMmcV/GT1KMhiIIvNwzdFXBGHXDePRoWZPySjh0sMDhHsrrphsZpo+z1arTGEiziNlUwQeEaXoAhRBTVOg8xzqOGVlBhGDJuwRHkCvo5BOTgB1FiA/aSQ=~-1~-1~-1; pageviewCount=4; pageviewCount30m=1; _uetsid=c38d390074d111efab3fe3763a2d5640; _uetvid=c38d6f3074d111efaa4d197904445237; OptanonConsent=isGpcEnabled=0&datestamp=Wed+Sep+18+2024+09%3A48%3A39+GMT%2B0200+(k%C3%B6z%C3%A9p-eur%C3%B3pai+ny%C3%A1ri+id%C5%91)&version=202304.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=BG36%3A1%2CC0004%3A1%2CC0010%3A1%2CC0011%3A1%2CC0001%3A1%2CC0003%3A1%2CC0002%3A1&AwaitingReconsent=false; dtCookie=v_4_srv_11_sn_P0BCVKEJ8PU0IAQ36NHB98TJMEJCQNOV_app-3A7077613abb396c51_1_ol_0_perc_100000_mul_1_rcs-3Acss_0; rxvt=1726647520947|1726645718958; dtPC=11$445718954_758h-vPWAHWWWHEWWHLDJROFORUWSPLGAALMUQ-0e0; _clck=7tp568%7C2%7Cfpa%7C0%7C1720; _clsk=vekcug%7C1726645721446%7C1%7C0%7Cr.clarity.ms%2Fcollect; _ga_GM4GWYGVKP=GS1.1.1726645719.3.0.1726645730.49.0.0; akavpau_defaultvp=1726646030~id=7a946bc02c82fd494c12eeae80766dc6; akaalb_chewy_ALB=1726646330~op=chewy_com_ALB:www-chewy-use2|prd_kasada:prd-kasada-haproxy-use1|~rv=16~m=www-chewy-use2:0|prd-kasada-haproxy-use1:0|~os=43a06daff4514d805d02d3b6b5e79808~id=be31e0a6e3aa8f0882c6df9fe1e81363',
     'priority': 'u=0, i',
-    'referer': 'https://www.chewy.com/pedigree-complete-nutrition-grilled/dp/141433',
     'sec-ch-ua': '"Chromium";v="128", "Not;A=Brand";v="24", "Google Chrome";v="128"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"Windows"',
