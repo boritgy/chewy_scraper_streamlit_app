@@ -270,15 +270,18 @@ if st.session_state.stage > 0:
                 url = sh[row+1][0].value
 
                 if row == 2 or row % 50 == 1:
-                    response = requests.get(url, cookies=cookies, headers=headers)
-                    soup = BeautifulSoup(response.text, 'html.parser')    
-                    scripts = soup.find("head").find_all("script")
-                    for script in scripts:
-                        #print(script)
-                        if script.has_attr("src"):
-                            if "/static/spa/chewy-pdp-ui/_next/static/chewy-pdp-ui-" in script["src"]:
-                                id_for_items = script["src"].replace("/static/spa/chewy-pdp-ui/_next/static/chewy-pdp-ui-", "").replace("/_buildManifest.js", "").replace("/_ssgManifest.js", "")
-                                break
+                    try:
+                        response = requests.get(url, cookies=cookies, headers=headers)
+                        soup = BeautifulSoup(response.text, 'html.parser')    
+                        scripts = soup.find("head").find_all("script")
+                        for script in scripts:
+                            #print(script)
+                            if script.has_attr("src"):
+                                if "/static/spa/chewy-pdp-ui/_next/static/chewy-pdp-ui-" in script["src"]:
+                                    id_for_items = script["src"].replace("/static/spa/chewy-pdp-ui/_next/static/chewy-pdp-ui-", "").replace("/_buildManifest.js", "").replace("/_ssgManifest.js", "")
+                                    break
+                    except:
+                        pass
                 
                 if "URL" not in url:
                     try:
